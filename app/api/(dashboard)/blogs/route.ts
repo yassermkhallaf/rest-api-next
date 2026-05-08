@@ -92,24 +92,26 @@ export const POST = async (request: Request) => {
         }
         const { userId, categoryId } = result;
         const body = await request.json();
-        const { description, title } = body;
-        if (!description || !title) {
+        const { description, title, date } = body;
+        if (!description || !title || !date) {
             return NextResponse.json(
                 { message: "Required fields not found" },
                 { status: 400 }
             )
         }
-        const newblog = await prisma.blog.create({
+        const newBlog = await prisma.blog.create({
             data: {
                 title,
                 description,
+                createdAt: date,
                 categoryId,
                 userId
             }
         }
         )
-        return NextResponse.json({ message: "success", newblog }, { status: 200 });
+        return NextResponse.json({ message: "success", newBlog }, { status: 200 });
     } catch (error: any) {
+        console.log(error);
         return NextResponse.json({ error: error.message }, { status: 500 });
     }
 };

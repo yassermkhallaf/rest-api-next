@@ -93,7 +93,7 @@ export const PATCH = async (request: Request, { params }: { params: Promise<{ bl
             },
             data: { title, description }
         })
-        return NextResponse.json({ message: "success", blog: updatedBlog }, { status: 200 });
+        return NextResponse.json({ message: "success", updatedBlog: updatedBlog }, { status: 200 });
     } catch (error: any) {
         return NextResponse.json({ error: error.message }, { status: 500 });
     }
@@ -144,7 +144,7 @@ export const DELETE = async (request: Request, { params }: { params: Promise<{ b
             },
 
         })
-        return NextResponse.json({ message: "success", blog: deletedBlog }, { status: 200 });
+        return NextResponse.json({ message: "success", deletedBlog: deletedBlog }, { status: 200 });
     } catch (error: any) {
         return NextResponse.json({ error: error.message }, { status: 500 });
     }

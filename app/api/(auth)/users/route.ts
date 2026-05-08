@@ -1,13 +1,14 @@
 import { NextResponse } from "next/server"
 import { prisma } from "@/lib/prisma"
 import { validate as isUUID } from "uuid"
+import { hashPassword } from "@/lib/auth";
 export const GET = async () => {
     try {
 
         const users = await prisma.user.findMany();
 
 
-        return new NextResponse(JSON.stringify(users), { status: 200 })
+        return NextResponse.json({ users }, { status: 200 })
     } catch (e: any) {
         return new NextResponse(`Error in fetching users: ${e.message}`, { status: 500 })
     }
@@ -16,11 +17,11 @@ export const GET = async () => {
 export const POST = async (request: Request) => {
     try {
         const body = await request.json();
-
+        const passwordHash = await hashPassword(body.password);
         const newUser = await prisma.user.create({
-            data: body
+            data: { email: body.email, passwordHash }
         })
-        return new NextResponse(JSON.stringify({ message: "User is created", user: newUser }), { status: 200 })
+        return NextResponse.json({ user: newUser }, { status: 200 })
     } catch (error: any) {
 
         return new NextResponse(`Error in creating user: ${error.message}`, { status: 500 })
